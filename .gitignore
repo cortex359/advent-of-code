@@ -3,3 +3,9 @@
 
 profile_default/
 ipython_config.py
+
+session.cookie
+
+__pycache__
+inputs
+2021
