@@ -34,4 +34,4 @@ def get_input(day):
             f.write(response.text[:-1])
 
     with open(path, "r") as f:
-        return f.readlines()
+        return [l.removesuffix("\n") for l in f]
