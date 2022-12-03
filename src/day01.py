@@ -6,7 +6,7 @@ elves = []
 calories = 0
 
 for l in input_str:
-    if l == '\n':
+    if l == '':
         elves.append(calories)
         calories = 0
     else:
