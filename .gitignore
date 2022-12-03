@@ -7,5 +7,7 @@ ipython_config.py
 session.cookie
 
 __pycache__
-inputs
-2021
+inputs/*
+!inputs/.gitkeep
+
+.idea
