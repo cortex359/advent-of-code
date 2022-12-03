@@ -1,7 +1,7 @@
-from utils.api import get_input
+with open("input") as file:
+	data = [line.removesuffix("\n") for line in file]
 
-input_str = get_input(2)
-
+input_str = data
 
 # Opponent: A for Rock, B for Paper, and C for Scissors
 # Me:       X for Rock, Y for Paper, and Z for Scissors
