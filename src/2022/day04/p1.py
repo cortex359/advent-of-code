@@ -19,5 +19,5 @@ for line in data:
 	if (c <= a <= d) or (c <= b <= d) or (a <= c <= b) or (a <= d <= b):
 		overlap_counter += 1
 
-print(contain_counter)
-print(overlap_counter)
+print("Assignment pairs fully containing the other: ", contain_counter)
+print("Assignment pairs that overlap: ", overlap_counter)
