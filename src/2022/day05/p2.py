@@ -37,4 +37,4 @@ output = ""
 for s in stack:
 	output += s[-1]
 
-print(output)
+print(f"Crates on top after using CrateMover 9001: {output}")
