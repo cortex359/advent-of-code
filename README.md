@@ -1,8 +1,8 @@
 # Advent of Code 2022 and some pre 2022
 
-![](https://img.shields.io/badge/stars%20⭐-12-yellow)
+![](https://img.shields.io/badge/stars%20⭐-14-yellow)
 
-![](https://img.shields.io/badge/days%20completed-6-red) of ![](https://img.shields.io/badge/day%20📅-7-blue)
+![](https://img.shields.io/badge/days%20completed-7-red) of ![](https://img.shields.io/badge/day%20📅-8-blue)
 
 A somewhat competitive python learning experience.
 
