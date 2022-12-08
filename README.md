@@ -4,6 +4,8 @@
 
 A somewhat competitive python learning experience. :snake:
 
+![](.github/aoc.png)
+
 Also check out [Rankail's](https://github.com/Rankail/AdventOfCode), [Mickery12's](https://github.com/Mickery12/Advent-of-Code) and [pblan's](https://github.com/pblan/aoc) solutions.
 
 For better insights in private leaderboards, see this awesome browser extension: 
