@@ -1,10 +1,8 @@
-# Advent of Code 2022 and some pre 2022
+# :christmas_tree: Advent of Code :gift: 2022
 
-![](https://img.shields.io/badge/stars%20⭐-14-yellow)
+![](https://img.shields.io/badge/stars%20⭐-16-yellow) ![](https://img.shields.io/badge/days%20completed-8-red)
 
-![](https://img.shields.io/badge/days%20completed-7-red) of ![](https://img.shields.io/badge/day%20📅-8-blue)
-
-A somewhat competitive python learning experience.
+A somewhat competitive python learning experience. :snake:
 
 Also check out [Rankail's](https://github.com/Rankail/AdventOfCode), [Mickery12's](https://github.com/Mickery12/Advent-of-Code) and [pblan's](https://github.com/pblan/aoc) solutions.
 
