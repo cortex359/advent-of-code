@@ -13,8 +13,8 @@ seg7_x, seg7_y = 0, 0
 seg8_x, seg8_y = 0, 0
 tail_x, tail_y = 0, 0
 
+seg1_pos: set([str]) = set()
 tail_pos: set([str]) = set()
-
 
 def tail_follow(hx, hy, tx, ty):
 	#print(f"head: {hx}:{hy} tail: {tx}:{ty}")
@@ -118,9 +118,11 @@ for line in data:
 		seg8_x, seg8_y = tail_follow(seg7_x, seg7_y, seg8_x, seg8_y)
 		tail_x, tail_y = tail_follow(seg8_x, seg8_y, tail_x, tail_y)
 
+		seg1_pos.add(str(seg1_x) + ":" + str(seg1_y))
 		tail_pos.add(str(tail_x) + ":" + str(tail_y))
 
 	print(f"== {line} ==")
-	print(f"->\thead: {head_x}:{head_y} seg6: {seg6_x}:{seg6_y}")
+	print(f"->\thead: {head_x}:{head_y}, seg1: {seg1_x}:{seg1_y}, tail: {tail_x}:{tail_y}")
 
-print(len(tail_pos))
+print(f"positions visited by rope 1st segment: {len(seg1_pos)}")
+print(f"positions visited by rope tail: {len(tail_pos)}")
