@@ -1,3 +1,4 @@
+from functools import cmp_to_key
 from colorama import Fore
 from colorama import Style
 
@@ -16,9 +17,7 @@ def compare_pkgs(a, b):
     elif type(a) == list and type(b) == list:
         for a_element, b_element in zip(a, b):
             o = compare_pkgs(a_element, b_element)
-            if o == 0:
-                continue
-            else:
+            if o != 0:
                 return o
         if len(a) < len(b):
             return 1
@@ -71,14 +70,24 @@ for n, line in enumerate(data):
 
 #       PART  I
 # >>>>>>-------<<<<<<
-
-# 5593 not right, 5503 right
+# >>> 5503
+#
 print(f"There are {len(indices)} out of {index} pair of packets already in the right order.\n"
       f"The sum of their indices is {Fore.YELLOW}{Style.BRIGHT}{sum(indices)}{Style.RESET_ALL}.")
 
 #       PART II
 # >>>>>>-------<<<<<<
-packages = bubble_sort(packages)
+# >>> 20952
+# >>> 108th and 194th place
+
+# 1st implementation
+#packages = bubble_sort(packages)
+
+# 2nd implementation after reading the docs:
+# > Comparison Functions
+# > Unlike key functions that return an absolute value for sorting, a comparison function computes the relative ordering
+# > for two inputs.
+packages = sorted(packages, key=cmp_to_key(compare_pkgs), reverse=True)
 
 divider_indices = [
     packages.index([[2]]) + 1,
