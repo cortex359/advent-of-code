@@ -5,45 +5,40 @@ with open("input") as file:
     data = [line.removesuffix("\n") for line in file]
 
 
-def compare_pkgs(left, right):
-    if type(left) == int and type(right) == int:
-        if left < right:
-            # print("Right order")
+def compare_pkgs(a, b):
+    if type(a) == int and type(b) == int:
+        if a < b:
             return 1
-        elif left > right:
-            # print("Wrong order")
+        elif a > b:
             return -1
         else:
-            # print("continue")
             return 0
-    elif type(left) == list and type(right) == list:
-        for l, r in zip(left, right):
-            o = compare_pkgs(l, r)
+    elif type(a) == list and type(b) == list:
+        for a_element, b_element in zip(a, b):
+            o = compare_pkgs(a_element, b_element)
             if o == 0:
                 continue
             else:
                 return o
-        if len(left) < len(right):
-            # print("Right order")
+        if len(a) < len(b):
             return 1
-        elif len(left) > len(right):
-            # print("Wrong order")
+        elif len(a) > len(b):
             return -1
         else:
             return 0
-    # print("continue")
-    elif type(left) == int and type(right) == list:
-        return compare_pkgs([left], right)
-    elif type(left) == list and type(right) == int:
-        return compare_pkgs(left, [right])
+    elif type(a) == int and type(b) == list:
+        return compare_pkgs([a], b)
+    elif type(a) == list and type(b) == int:
+        return compare_pkgs(a, [b])
 
 
 def bubble_sort(array):
-    n = len(array)
-    for i in range(n):
+    s = len(array)
+    for i in range(s):
         already_sorted = True
-        for j in range(n - i - 1):
+        for j in range(s - i - 1):
             if compare_pkgs(array[j], array[j + 1]) == -1:
+                # bubble
                 array[j], array[j + 1] = array[j + 1], array[j]
                 already_sorted = False
         if already_sorted:
@@ -51,8 +46,9 @@ def bubble_sort(array):
     return array
 
 
-indices = []
-packages = [[[2]], [[6]]]
+index: int = 1
+indices: list = []
+packages: list = [[[2]], [[6]]]
 
 for n, line in enumerate(data):
     if n % 3 == 0:
@@ -77,7 +73,7 @@ for n, line in enumerate(data):
 # >>>>>>-------<<<<<<
 
 # 5593 not right, 5503 right
-print(f"There are {len(indices)} out of {(n // 3 + 1)} pair of packets already in the right order.\n"
+print(f"There are {len(indices)} out of {index} pair of packets already in the right order.\n"
       f"The sum of their indices is {Fore.YELLOW}{Style.BRIGHT}{sum(indices)}{Style.RESET_ALL}.")
 
 #       PART II
