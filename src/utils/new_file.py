@@ -1,6 +1,9 @@
 import os
 import sys
 import requests
+from datetime import datetime, date
+
+now = datetime.now()
 
 def get_session_id(filename):
     with open(filename) as f:
@@ -35,11 +38,15 @@ COOKIES = {
     "session": get_session_id(SESSION_ID_FILE)
 }
 
-day = int(sys.argv[1])
-if len(sys.argv) > 2:
-    year = int(sys.argv[2])
+if len(sys.argv) < 3:
+    year = int(now.strftime("%Y"))
 else:
-    year = 2022
+    year = int(sys.argv[2])
+
+if len(sys.argv) < 2:
+    day = int(now.strftime("%d"))
+else:
+    day = int(sys.argv[1])
 
 DEFAULT_FILE = f"with open(\"input\") as file:\n\tdata = [line.removesuffix(\"\\n\") for line in file]\n\nfor line in data:\n\t\n"
 
@@ -54,12 +61,13 @@ for d in ["src", f"{year:04d}", f"day{day:02d}"]:
         except OSError as error:
             print(error)
 
+print(f"Started puzzle at {now}")
 print("Saving input:")
 save_input(day, year)
 
 path = os.path.join(directory, filename)
 if os.path.exists(path):
-    print("Python file exisits.")
+    print("Python file exists.")
 else:
     with open(path, "x") as file:
         file.write(DEFAULT_FILE)
