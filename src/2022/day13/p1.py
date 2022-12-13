@@ -9,9 +9,9 @@ with open("input") as file:
 def compare_pkgs(a, b):
     if type(a) == int and type(b) == int:
         if a < b:
-            return 1
-        elif a > b:
             return -1
+        elif a > b:
+            return 1
         else:
             return 0
     elif type(a) == list and type(b) == list:
@@ -20,9 +20,9 @@ def compare_pkgs(a, b):
             if o != 0:
                 return o
         if len(a) < len(b):
-            return 1
-        elif len(a) > len(b):
             return -1
+        elif len(a) > len(b):
+            return 1
         else:
             return 0
     elif type(a) == int and type(b) == list:
@@ -59,10 +59,10 @@ for n, line in enumerate(data):
 
         result = compare_pkgs(left, right)
         index = (n // 3) + 1
-        if result == 1:
+        if result == -1:
             # print(f"Pair {index:3d}: Right order")
             indices.append(index)
-        elif result == -1:
+        elif result == 1:
             # print(f"Pair {index:3d}: Wrong order")
             pass
         else:
@@ -87,7 +87,7 @@ print(f"There are {len(indices)} out of {index} pair of packets already in the r
 # > Comparison Functions
 # > Unlike key functions that return an absolute value for sorting, a comparison function computes the relative ordering
 # > for two inputs.
-packages = sorted(packages, key=cmp_to_key(compare_pkgs), reverse=True)
+packages = sorted(packages, key=cmp_to_key(compare_pkgs))
 
 divider_indices = [
     packages.index([[2]]) + 1,
