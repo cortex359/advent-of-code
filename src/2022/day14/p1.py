@@ -1,7 +1,6 @@
 import numpy as np
 
 with open("input") as file:
-	# with open("example") as file:
 	data = [line.removesuffix("\n") for line in file]
 
 sand_start = (500, 0)
@@ -11,7 +10,7 @@ rock_formations: list[list[(int, int)]] = []
 # 455 < x < 526
 # 15 < y < 170
 
-grid = np.array([['.'] * 550] * 180)
+grid = np.array([['.'] * 1200] * 173)
 
 
 # 498,4 -> 498,6 -> 496,6
@@ -69,7 +68,7 @@ def move_diag_right(x, y):
 
 def move_down(x, y):
 	# sand always falls down one step if possible
-	delta_y = 0
+	delta_y = 1
 	while grid[y + delta_y, x] == ".":
 		delta_y += 1
 	delta_y -= 1
@@ -82,8 +81,13 @@ def draw_sand():
 	# delete sand
 	grid[y, x] = "."
 
-	x, y = move_down(x, y)
-	x, y = move_diag(x, y)
+	prev_x, prev_y = (-1, -1)
+
+	while prev_x != x and prev_y != y:
+		prev_x, prev_y = x, y
+		# print(f"{prev_x}:{prev_y} -> {x}:{y}")
+		x, y = move_down(x, y)
+		x, y = move_diag(x, y)
 
 	# place down
 	if grid[y, x] != '.':
@@ -91,6 +95,21 @@ def draw_sand():
 	else:
 		grid[y, x] = "o"
 
+
+def display_grid():
+	# mark sand source after sand has been drawn!
+	grid[sand_start[1], sand_start[0]] = "+"
+
+	for c, cols in enumerate(grid):
+		if 0 < c < 172:
+			for r, cell in enumerate(cols):
+				if 300 < r < 460:
+					print(cell, end='')
+			print()
+
+###
+### START
+###
 
 for line in data:
 	rock = [tuple(map(int, x.split(","))) for x in line.split(" -> ")]
@@ -100,17 +119,33 @@ for rock in rock_formations:
 	draw_rocks(rock)
 
 # Void border
-grid[-1] = ["~"] * 550
+# grid[-1] = ["~"] * 550
+grid[170 + 2] = ["~"] * 1200
 
-while "o" not in grid[-2]:
+
+# >>>>>>-------<<<<<<
+#       PART  I
+# >>>>>>-------<<<<<<
+# >>> 838
+#
+while "o" not in grid[170 + 1]:
 	draw_sand()
 
-# mark sand source after sand has been drawn!
-grid[sand_start[1], sand_start[0]] = "+"
+# exclude the detected sand unit at the void border
+units_of_sand = len([c for c in grid.flatten() if c == "o"]) - 1
+print("Part I:", units_of_sand)
 
-# Display grid
-for l in grid:
-	for i, m in enumerate(l):
-		if 450 < i < 550:
-			print(m, end='')
-	print()
+
+# >>>>>>-------<<<<<<
+#       PART II
+# >>>>>>-------<<<<<<
+# >>> 27539
+#
+while grid[sand_start[1], sand_start[0]] != "o":
+	draw_sand()
+
+# dont exclude the sand unit
+units_of_sand = len([c for c in grid.flatten() if c == "o"])
+print("Part II:", units_of_sand)
+
+display_grid()
