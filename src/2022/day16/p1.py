@@ -1,6 +1,7 @@
 import re
 from collections import deque
 import itertools
+import time as timelib
 
 from copy import deepcopy
 
@@ -99,28 +100,21 @@ def go_path(a, b, time):
 	return added_time, added_pressure
 
 
-time, pressure = (0, 0)
-last_p = start_valve
-for p in targets:
-	dt, dp = go_path(last_p, p, time)
-	last_p = p
-	time += dt
-	pressure += dp
-
-print(time)
-
-exit(0)
-
 #   permutations = itertools.permutations(targets)
 #   count = 0
 #   for path in permutations:
 #   	count += 1
 #   print(f"Total checks: {count}")
 
+st = timelib.time()
+
+max_search_space = 1_307_674_368_000
+count = 0
 pressure_max = 0
-for path in targets:
+for path in itertools.permutations(targets):
 	time, pressure = (0, 0)
 	last_p = start_valve
+	count += 1
 	for p in path:
 		dt, dp = go_path(last_p, p, time)
 		last_p = p
@@ -130,6 +124,12 @@ for path in targets:
 		else:
 			break
 	pressure_max = max(pressure_max, pressure)
-	print(pressure, time)
+	if count % 1_000_000 == 0:
+		print(f"{count:,} execution time so far: {(timelib.time() - st)  * 1000:20.6f} ms\n")
+		print("pressure_max:", pressure_max, "pressure/time example:", pressure, time)
 
+print("Finished!!!")
 print(pressure_max)
+
+et1 = timelib.time()
+print(f"Execution time Part I:  {(et1 - st)  * 1000:10.6f} ms")
