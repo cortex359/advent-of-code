@@ -5,26 +5,31 @@ with open("input") as file:
 #       1 |       cf |    c  f
 #       7 |      acf |  a c  f
 #       4 |     bcdf |   bcd f
+
 #       2 |    acdeg |  a cde g
 #       3 |    acdfg |  a cd fg
 #       5 |    abdfg |  ab d fg
+
 #       0 |   abcefg |  abc efg
 #       6 |   abdefg |  ab defg
 #       9 |   abcdfg |  abcd fg
+
 #       8 |  abcdefg |  abcdefg
 
 # default_figs: dict = {
-# 	"1": "cf",
-# 	"7": "acf",
-# 	"4": "bcdf",
-# 	"2": "acdeg",
-# 	"3": "acdfg",
-# 	"5": "abdfg",
-# 	"0": "abcefg",
-# 	"6": "abdefg",
-# 	"9": "abcdfg",
-# 	"8": "abcdefg"
+# 	0 :  abcefg
+# 	1 :      cf
+# 	2 :   acdeg
+# 	3 :   acdfg
+# 	4 :    bcdf
+# 	5 :   abdfg
+# 	6 :  abdefg
+# 	7 :     acf
+# 	8 : abcdefg
+# 	9 :  abcdfg
 # }
+
+data = [ "abcefg cf acdeg acdfg bcdf abdfg abdefg acf abcdefg abcdfg | ... " ]
 
 for line in data:
 	patterns, output = line.split(" | ")
@@ -44,6 +49,11 @@ for line in data:
 		length_6.append(set(y for y in c))
 
 	a: str = [x for x in seven.difference(one)][0]
-	
+
+	cde: set = set((
+		eight.difference(length_6[0]).pop(),
+		eight.difference(length_6[1]).pop(),
+		eight.difference(length_6[2]).pop()
+	))
 
 	print(one.intersection(seven, four))

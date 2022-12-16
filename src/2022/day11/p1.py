@@ -1,3 +1,5 @@
+import time
+
 with open("input") as file:
 	data = [line.removesuffix("\n") for line in file]
 
@@ -67,7 +69,8 @@ def start_game(rounds, monkeys, divider=True):
 				if divider:
 					worry_lvl = worry_lvl // 3
 				else:
-					worry_lvl = worry_lvl % (3 * 11 * 19 * 5 * 2 * 7 * 17 * 13)
+					# (3 * 11 * 19 * 5 * 2 * 7 * 17 * 13)
+					worry_lvl = worry_lvl % 9_699_690
 				# print(f"\t\tMonkey gets bored with item. Worry level is divided by 3 to {worry_lvl}.")
 				monkeys[m.test(worry_lvl)].items.append(worry_lvl)
 			# print(f"\t\tItem with worry level {worry_lvl} is thrown to monkey {m.test(worry_lvl)}.")
@@ -86,12 +89,24 @@ def start_game(rounds, monkeys, divider=True):
 
 #######################################################################################################################
 
+st = time.time()
+
 # Part I
 monkeys = [Monkey(0), Monkey(1), Monkey(2), Monkey(3), Monkey(4), Monkey(5), Monkey(6), Monkey(7)]
 start_game(20, monkeys)
 printout(monkeys)
 
+et1 = time.time()
+
 # Part II
 monkeys = [Monkey(0), Monkey(1), Monkey(2), Monkey(3), Monkey(4), Monkey(5), Monkey(6), Monkey(7)]
 start_game(10000, monkeys, divider=False)
 printout(monkeys)
+
+et2 = time.time()
+
+print(f"Execution time Part I:  {(et1 - st)  * 1000:10.6f} ms")
+print(f"Execution time Part II: {(et2 - et1) * 1000:10.6f} ms")
+
+
+
