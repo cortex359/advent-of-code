@@ -1,11 +1,16 @@
 import re
+import sys
 from collections import deque
 import itertools
 import time as timelib
 
 from copy import deepcopy
+if sys.argv[0] == "-i":
+	target = "input"
+else:
+	target = "example"
 
-with open("input") as file:
+with open(target1) as file:
 	data = [line.removesuffix("\n") for line in file]
 
 # Valve VO has flow rate=6; tunnels lead to valves KM, RF, HS, LJ, IA
@@ -81,6 +86,7 @@ def distances():
 	for v in valves:
 		print(v.distance(start_valve), v.name)
 
+
 for line in data:
 	name, flow_rate = re.findall("Valve ([A-Z]{2}) has flow rate=([0-9]+);", line)[0]
 	edges = re.findall("[A-Z]{2}", line)[1:]
@@ -93,8 +99,9 @@ targets.sort()
 
 routes: set = set()
 
+
 def go_path(a, b, time):
-	#added_time = a.target_edges[b.name] + 1
+	# added_time = a.target_edges[b.name] + 1
 	added_time = bfs(a, b) + 1
 	added_pressure = b.flow * (30 - added_time - time)
 	return added_time, added_pressure
@@ -108,28 +115,36 @@ def go_path(a, b, time):
 
 st = timelib.time()
 
-max_search_space = 1_307_674_368_000
-count = 0
-pressure_max = 0
-for path in itertools.permutations(targets):
-	time, pressure = (0, 0)
-	last_p = start_valve
-	count += 1
-	for p in path:
-		dt, dp = go_path(last_p, p, time)
-		last_p = p
-		if time + dt <= 30:
-			time += dt
-			pressure += dp
-		else:
-			break
-	pressure_max = max(pressure_max, pressure)
-	if count % 1_000_000 == 0:
-		print(f"{count:,} execution time so far: {(timelib.time() - st)  * 1000:20.6f} ms\n")
-		print("pressure_max:", pressure_max, "pressure/time example:", pressure, time)
+def search_permutations():
+	max_search_space = 1_307_674_368_000
+	count = 0
+	pressure_max = 0
+	for path in itertools.permutations(targets):
+		time, pressure = (0, 0)
+		last_p = start_valve
+		count += 1
+		for p in path:
+			dt, dp = go_path(last_p, p, time)
+			last_p = p
+			if time + dt <= 30:
+				time += dt
+				pressure += dp
+			else:
+				break
+		pressure_max = max(pressure_max, pressure)
+		if count % 10_000 == 0:
+			print(f"{count:,} execution time so far: {(timelib.time() - st) * 1000:20.6f} ms\n")
+			print("pressure_max:", pressure_max, "pressure/time example:", pressure, time)
 
-print("Finished!!!")
-print(pressure_max)
+	print("Finished!!!")
+	print(pressure_max)
+
+last_t = start_valve
+for t in targets:
+	dt, dp = go_path(last_t, t, 0)
+	print(f"{dt}, {dp}")
+
+
 
 et1 = timelib.time()
-print(f"Execution time Part I:  {(et1 - st)  * 1000:10.6f} ms")
+print(f"Execution time Part I:  {(et1 - st) * 1000:10.6f} ms")
