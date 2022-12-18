@@ -18,3 +18,6 @@ Start new day with
 ```shell
 python src/utils/new_file.py 1 2022
 ```
+
+## Santa Hacking…
+![](.github/santa_hacking.png)
