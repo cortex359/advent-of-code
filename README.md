@@ -13,10 +13,14 @@ For better insights in private leaderboards, see this awesome browser extension:
 
 ## Usage
 
-Start new day with
-
+Start new day:
 ```shell
 python src/utils/new_file.py 1 2022
+```
+
+Extract example:
+```shell
+pcre2grep -Me '(?:[`]{3}[\n\s]*)([^`]+)(?:[`]{3})' -m1 --output '$1' puzzle.md > example
 ```
 
 ## Santa Hacking…
