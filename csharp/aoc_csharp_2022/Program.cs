@@ -18,7 +18,7 @@ public class Program
     {
         if (args.Length == 0)
         {
-            Day day = new Day02();
+            Day day = new Day25();
 
             string input = Path.Join(ProjectDir, day.Name, "input");
             string[] lines = File.ReadAllLines(input);
