@@ -1,5 +1,14 @@
 ﻿namespace aoc_csharp_2022;
 
+public abstract class Day
+{
+    public string Name
+    {
+        get => this.GetType().Name;
+    }
+    public abstract void Run(string[] lines);
+}
+
 public class Program
 {
     //public static readonly string ProjectDir = GetProjectDir("aoc_csharp_2022");
@@ -9,9 +18,12 @@ public class Program
     {
         if (args.Length == 0)
         {
-            string input = Path.Join(ProjectDir, nameof(Day01), "input");
+            Day day = new Day02();
+
+            string input = Path.Join(ProjectDir, day.Name, "input");
             string[] lines = File.ReadAllLines(input);
-            Day01.Run(lines);
+
+            day.Run(lines);
         }
     }
 

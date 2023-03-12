@@ -1,8 +1,8 @@
 namespace aoc_csharp_2022;
 
-public class Day01
+public class Day01 : Day
 {
-    public static void Run(string[] lines)
+    public override void Run(string[] lines)
     {
         List<int> elves = new List<int>();
         int weight = 0;
