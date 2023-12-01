@@ -25,8 +25,8 @@ def last_num(line):
     rank = []
 
     for word in ('one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine'):
-        if line.find(word) >= 0:
-            rank.append((word, d, line.find(word)))
+        if line.rfind(word) >= 0:
+            rank.append((word, d, line.rfind(word)))
         d += 1
 
     rank = sorted(rank, key=lambda x: x[2], reverse=True)
@@ -37,6 +37,6 @@ def last_num(line):
 
 for line in data:
     print('{} → {} + {}'.format(line, first_num(line), last_num(line)))
-    summe += int(first_num(line) + last_num(line))
+    summe += int(str(first_num(line)) + str(last_num(line)))
 
 print(summe)
