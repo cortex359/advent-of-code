@@ -31,3 +31,5 @@ pcre2grep -Me '(?:[`]{3}[\n\s]*)([^`]+)(?:[`]{3})' -m1 --output '$1' puzzle.md >
 
 ## Santa Hacking…
 ![](imgs/santa_hacking_2023.png)
+
+See [here](imgs/README.md) for information on the images.
