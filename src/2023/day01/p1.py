@@ -11,5 +11,5 @@ for line in data:
     print('{} → {} : {}'.format(line, cleand_line, calibration_value))
     sum_cvs += calibration_value
 
-# 54331
+# → 54331
 print(sum_cvs)

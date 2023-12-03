@@ -43,5 +43,5 @@ for line in data:
     print('{} → {} + {}'.format(line, first_num(line), last_num(line)))
     summe += int(str(first_num(line)) + str(last_num(line)))
 
-# 54518
+# → 54518
 print(summe)
