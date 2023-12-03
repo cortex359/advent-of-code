@@ -4,7 +4,7 @@
 ![](https://img.shields.io/badge/stars%20⭐-32-yellow) ![](https://img.shields.io/badge/days%20completed-16-red)
 -->
 
-A somewhat competitive python learning experience. :snake:
+A somewhat competitive Python :snake: learning experience. 
 
 ![](imgs/aoc_2023.png)
 
