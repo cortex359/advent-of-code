@@ -7,5 +7,5 @@ __pycache__
 .idea
 
 session.cookie
-puzzle.md
+#puzzle.md
 check.py
