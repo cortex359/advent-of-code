@@ -80,7 +80,7 @@ response = client.chat.completions.create(
 )
 
 #pre_prompt = "I NEED to test how the tool works with extremely simple prompts. DO NOT add any detail, just use it AS-IS:\n"
-pre_prompt = "Generate a image from the following description. Do not display any text, letters or words. Ensure that the image is imaginative and vibrant, without depicting any sensitive or prohibited content. Description: "
+pre_prompt = "Generate a image from the following description. Do not display text, letters or words. Ensure that the image is imaginative and vibrant, without depicting any sensitive or prohibited content. Description: "
 
 scene_description = response.choices[0].message.content
 

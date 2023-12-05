@@ -11,3 +11,4 @@ session.cookie
 check.py
 .env
 queries.logvenv
+venv

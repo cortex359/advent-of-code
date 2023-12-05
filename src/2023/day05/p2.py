@@ -6,7 +6,7 @@ import itertools
 
 # d = defaultdict(int)  # Default to int (0)
 
-with open("example") as file:
+with open("input") as file:
     data: list = [line.removesuffix("\n") for line in file]
 
 # Regex Stuff
@@ -50,66 +50,62 @@ for line in data[2:]:
         destination_start, source_start, range_length = line.split(" ")
         maps[f"{destination}-{source}"].append((int(destination_start), int(source_start), int(range_length)))
 
+print("#############")
 
 # for mappings
 # seed_ranges -> slice -> convert -> repeat
 # seed_ranges: list of (start, ende)
 
-def slice_ranges(list_of_ranges: set, slice_start: int, slice_end: int) -> set:
-    print('Running slice_ranges with list_of_ranges = {}'.format(list_of_ranges))
-    list_of_ranges_to_iterate: list = list(list_of_ranges.copy())
-    out_range_set: set = list_of_ranges.copy()
-    # range list: (start, end)
-    for index, range_start_end in enumerate(list_of_ranges_to_iterate):
-        range_start, range_end = range_start_end
-        # range is completely outside of slice
-        if range_end <= slice_start or range_start >= slice_end:
-            continue
-        # range is completely inside of slice
-        out_range_set.discard(range_start_end)
-        if slice_start >= range_start and slice_end <= range_end:
-            out_range_set.add((slice_start, slice_end))
-            out_range_set.add((range_start, slice_start - 1))
-            out_range_set.add((slice_end + 1, range_end))
-        # range is partially inside of slice right side
-        elif range_start < slice_start < range_end:
-            out_range_set.add((range_start, slice_start))
-            out_range_set.add((slice_start + 1, range_end))
-        # range is partially inside of slice left side
-        elif range_start < slice_end < range_end:
-            out_range_set.add((range_start, slice_end))
-            out_range_set.add((slice_end + 1, range_end))
-    return out_range_set
+def slice_ranges(a: set[tuple[int, int]], b: set[tuple[int, int]]) -> set[tuple[int, int]]:
+    boundaries: set[int] = set()
+    for i in a.union(b):
+        boundaries.add(i[0])
+        boundaries.add(i[1])
 
-def convert_range(erange, destination_start):
-    return
+    sliced_boundaries: set[tuple[int, int]] = set()
+    boundary_list = sorted(list(boundaries))
+    for i in range(len(boundary_list) - 1):
+        for s in a:
+            if s[0] <= boundary_list[i] < boundary_list[i + 1] <= s[1]:
+                # we have a boundary inside a
+                sliced_boundaries.add((boundary_list[i], boundary_list[i + 1]))
+
+    return sliced_boundaries
+
+def convert_range(erange, delta):
+    return (erange[0] + delta, erange[1] + delta)
 
 # for all mappings
 for key, mappings in maps.items():
-    print(key, mappings)
+    print("key={}, mappings={}".format(key, mappings))
 
     # slice accordingly
     print("Slicing…")
     original_seed_range_list = seed_range_list.copy()
     seed_range_set: set = set(seed_range_list)
-    for i, src_range in enumerate(original_seed_range_list):
-        print("list_of_source_ranges", src_range)
-        for destination_start, source_start, range_length in mappings:
-            seed_range_set = slice_ranges(seed_range_set, source_start, source_start + range_length)
+    # destination range start, the source range start, and the range length
+
+    map_intervalls = [(source_start, source_start + range_length) for _, source_start, range_length in mappings]
+    seed_range_set = slice_ranges(seed_range_set, map_intervalls)
     print("New seed range set: {}".format(sorted(seed_range_set)))
 
     # convert
     # destination range start, the source range start, and the range length
     print("Converting…")
     converted_ranges: set = set()
-    for i, srcr in enumerate(seed_range_set):
+    for seed_range in seed_range_set:
+        converted = False
         for destination_start, source_start, range_length in mappings:
-            converted_ranges.add((
-                srcr[0] + destination_start - source_start,
-                srcr[1] + destination_start - source_start,
-                range_length
-            ))
+            if seed_range[0] >= source_start and seed_range[1] <= source_start + range_length:
+                converted_ranges.add(convert_range(seed_range, destination_start - source_start))
+                converted = True
+                break
 
+        if not converted:
+            converted_ranges.add(seed_range)
+
+    print("converted_ranges:", converted_ranges)
     seed_range_list = converted_ranges
 
-print(seed_range_list)
+print("converted seed_range_list: {}".format(sorted(seed_range_list)))
+print("min: {}".format(min(seed_range_list)[0]))
