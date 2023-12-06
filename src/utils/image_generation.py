@@ -29,8 +29,8 @@ performance_settings: dict = {
 
 performance_settings: dict = {
     'size': '1792x1024',
-    'quality': 'standard',
-    'text_model': 'gpt-35-turbo-1106',
+    'quality': 'hd',
+    'text_model': 'gpt-4-turbo',
 }
 
 client = AzureOpenAI(
@@ -80,7 +80,7 @@ response = client.chat.completions.create(
 )
 
 #pre_prompt = "I NEED to test how the tool works with extremely simple prompts. DO NOT add any detail, just use it AS-IS:\n"
-pre_prompt = "Generate a image from the following description. Do not display text, letters or words. Ensure that the image is imaginative and vibrant, without depicting any sensitive or prohibited content. Description: "
+pre_prompt = "Generate a vibrant, high-definition 3D animation style image in a fantasy setting from the following description. Do NOT show any text. Ensure that the image is imaginative and vibrant, without depicting any sensitive or prohibited content. Use a rich and varied color palette, with a predominance of blues, greens and reds that evoke a sense of wonder and tranquility. Description: "
 
 scene_description = response.choices[0].message.content
 
