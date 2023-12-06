@@ -1,26 +1,12 @@
 import re
-import numpy as np
-from collections import deque
-from collections import defaultdict
-import itertools
-
-# d = defaultdict(int)  # Default to int (0)
 
 with open("input") as file:
     data: list = [line.removesuffix("\n") for line in file]
 
-# Regex Stuff
-# -----------
-def line_to_list_of_ints(line):
-    """Convert a line of numbers to a list of ints"""
-    return list(map(int, re.findall(r'\d+', line)))
-
-#######################################################################
-
 seed_range_list: list[tuple[int, int]] = []
 
 if data[0].startswith("seeds: "):
-    seed_list: list[int] = line_to_list_of_ints(data[0])
+    seed_list: list[int] = list(map(int, re.findall(r'\d+', data[0])))
 print(seed_list)
 
 summing = 0
