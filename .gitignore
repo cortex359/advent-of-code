@@ -12,3 +12,5 @@ check.py
 .env
 queries.logvenv
 venv
+puzzle.md
+input
