@@ -52,10 +52,6 @@ def evaluate_hand(line):
     # High card
     return delta
 
-def compare_hands(hand1, hand2):
-    print(evaluate_hand(hand1.split(" ")[0]), evaluate_hand(hand2.split(" ")[0]))
-    return evaluate_hand(hand1.split(" ")[0]) - evaluate_hand(hand2.split(" ")[0])
-
 def sort_poker_hands(hands):
     return sorted(hands, key=evaluate_hand, reverse=False)
 
