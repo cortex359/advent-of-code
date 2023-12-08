@@ -60,7 +60,7 @@ v3 = "Create an image of a [general subject or theme], focusing on [specific ele
 
 v4 = "You will be given a file with a puzzle and a story about Christmas elves who have to solve the puzzle in order to save Christmas. Summarize the story, but do not describe the puzzle itself.  Visually describe a remarkable scene from that story. Include recognizable objects from the story in your description. Do not describe any text or names, and do not include direct speech. Focus on specific key elements from the story.  Keep it under 800 characters."
 
-v5 = "You will be given a file with a puzzle and a story about Christmas elves who have to solve the puzzle in order to save Christmas. Summarize the story, but do not describe the puzzle itself.  Visually describe remarkable aspects from that story. Include recognizable objects from the story in your description. Do not describe any text or names, and do not include direct speech. Focus on specific key elements from the story.  Keep it under 800 characters."
+v5 = "You will be given a file with a puzzle and a story about Christmas elves who have to solve the puzzle in order to save Christmas. Summarize the story, but do not describe the puzzle itself.  Visually describe remarkable aspects from that story. Include recognizable objects from the story in your description. Do not describe any text or names, and do not include direct speech. Focus on specific elements from the story.  Keep it under 800 characters."
 
 
 message_text: list[dict] = [
