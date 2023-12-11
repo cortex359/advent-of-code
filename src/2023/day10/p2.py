@@ -1,48 +1,28 @@
+import os
 import re
+import sys
+
 import numpy as np
 from collections import deque
 from collections import defaultdict
 import itertools
+import copy
 
-# d = defaultdict(int)  # Default to int (0)
+from colorama import init as colorama_init
+from colorama import Fore
+from colorama import Style
 
-with open("input") as file:
+colorama_init()
+
+input_file = sys.argv[1] if len(sys.argv) > 1 else "input"
+if not os.path.isfile(input_file):
+    print(f"{Fore.RED}Input file {Style.BRIGHT}{input_file}{Style.NORMAL} not found!{Style.RESET_ALL}")
+    exit(1)
+
+with open(input_file) as file:
     data: list = [line.removesuffix("\n") for line in file]
 
 grid: list[list] = [list(line) for line in data]
-
-# Regex Stuff
-# -----------
-def line_to_list_of_ints(line):
-    """Convert a line of numbers to a list of ints"""
-    return list(map(int, re.findall(r'\d+', line)))
-
-
-def get_fullstr_by_pointing_to_segment(line: str, index: int, chars: str = "01234567890", valid: bool = True) -> str:
-    """Get full string of valid chars by pointing to a segment of it, expending left and right from there"""
-    end = index
-
-    while index >= 0 and ((chars.find(line[index]) >= 0 and valid) or (chars.find(line[index]) < 0 and not valid)):
-        index -= 1
-    while end < len(line) and ((chars.find(line[end]) >= 0 and valid) or (chars.find(line[end]) < 0 and not valid)):
-        end += 1
-
-    return line[index + 1:end]
-
-
-# cartesian product
-# for i, j in itertools.product('ABC', 'xyz'):
-#   print('{}{}, '.format(i, j), end='')
-# Ax, Ay, Az, Bx, By, Bz, Cx, Cy, Cz
-
-# permutations
-# itertools.permutations('ABCD', 2)
-# AB AC AD BA BC BD CA CB CD DA DB DC
-
-# combinations
-# itertools.combinations('ABCD', 2)
-# AB AC AD BC BD CD
-
 
 # 2D Grid Stuff
 # -------------
@@ -51,7 +31,7 @@ def get_neighbor_coordinates(grid, zeile: int, spalte: int) -> list[tuple[int, i
     neighbors = []
     for dx, dy in [(-1, 0), (1, 0), (0, -1), (0, 1)]:
         nx, ny = zeile + dx, spalte + dy
-        if 0 <= nx < len(grid[0]) and 0 <= ny < len(grid):
+        if 0 <= nx < len(grid) and 0 <= ny < len(grid[0]):
             neighbors.append((nx, ny))
     return neighbors
 
@@ -81,34 +61,6 @@ def get_diagonals(grid, zeile, spalte):
         neighbors.append(grid[_x][_y])
     return neighbors
 
-
-def rotate_grid(grid):
-    """Rotate a 2D Grid 90 degrees clockwise"""
-    return [list(reversed(col)) for col in zip(*grid)]
-
-
-# 3D Grid Stuff
-# -------------
-def create_3d_grid(depth, height, width, fill_value=0):
-    """Create a 3D Grid with a default value"""
-    return [[[fill_value for _ in range(width)] for _ in range(height)] for _ in range(depth)]
-
-
-def get_3d_neighbor_coordinates(grid, x, y, z):
-    """Get all valid neighbor coordinates (up to 26) in a 3D Grid"""
-    neighbors = []
-    for dx, dy, dz in [(i, j, k) for i in [-1, 0, 1] for j in [-1, 0, 1] for k in [-1, 0, 1] if (i, j, k) != (0, 0, 0)]:
-        nx, ny, nz = x + dx, y + dy, z + dz
-        if 0 <= nx < len(grid[0][0]) and 0 <= ny < len(grid[0]) and 0 <= nz < len(grid):
-            neighbors.append((nx, ny, nz))
-    return neighbors
-
-def get_3d_neighbors(grid, x, y, z):
-    """Get all valid neighbor values (up to 26) in a 3D Grid"""
-    neighbors = []
-    for _x, _y, _z in get_3d_neighbor_coordinates(grid, x, y, z):
-        neighbors.append(grid[_z][_y][_x])
-    return neighbors
 
 # Graph Stuff
 # -----------
@@ -181,24 +133,6 @@ def manhattan_distance(x1, y1, x2, y2):
     return abs(x1 - x2) + abs(y1 - y2)
 
 
-def slice_ranges(a: set[tuple[int, int]], b: set[tuple[int, int]]) -> set[tuple[int, int]]:
-    """slices a set of intervals into subintervals, such that all subintervals are either inside or outside every
-    interval in set b"""
-    tupels: tuple[int] = tuple()
-    for i in a.union(b):
-        tupels += i
-
-    sliced_boundaries: set[tuple[int, int]] = set()
-    boundary_list: list[int] = sorted(list(set(tupels)))
-
-    for i in range(len(boundary_list) - 1):
-        for s in a:
-            if s[0] <= boundary_list[i] < boundary_list[i + 1] <= s[1]:
-                sliced_boundaries.add((boundary_list[i], boundary_list[i + 1]))
-
-    return sliced_boundaries
-
-
 
 # | is a vertical pipe connecting north and south.
 # - is a horizontal pipe connecting east and west.
@@ -224,7 +158,7 @@ for m in range(len(grid)):
         if grid[m][n] == '7':
             grid[m][n] = '\\'
 
-grid_distances = grid.copy()
+grid_distances = copy.deepcopy(grid)
 
 queue: deque[tuple[int, int, int]] = deque([(start_position[0], start_position[1], 0)])
 while len(queue) > 0:
@@ -273,14 +207,76 @@ while len(queue) > 0:
 
     grid_distances[m][n] = distance
 
-for m in range(len(grid_distances)):
-    for n in range(len(grid_distances[m])):
-        if grid[m][n] == '.':
-            pass
+
+def raster(grid_distances):
+    additions, last_additions = 1, 0
+    while additions > last_additions:
+        last_additions = additions
+        for m in range(len(grid_distances)):
+            for n in range(len(grid_distances[m])):
+                if grid_distances[m][n] == '.':
+                    neighbors = get_neighbors(grid_distances, m, n)
+                    if len(neighbors) < 4 or 'ø' in neighbors:
+                        grid_distances[m][n] = 'ø'
+                        additions += 1
 
 
-for g in range(len(grid_distances)):
-    for n in range(len(grid_distances[g])):
-        e = grid_distances[g][n] if type(grid_distances[g][n]) is str else '{:04d}'.format(grid_distances[g][n])
-        print('{:4s}'.format(e), end=' ')
-    print()
+
+def raster_inside(grid_distances):
+    for m in range(len(grid_distances)):
+        for n in range(len(grid_distances[m])):
+            if grid_distances[m][n] == '.':
+                neighbors = get_neighbors(grid_distances, m, n)
+                for ne in neighbors:
+                    if type(ne) is int or ne.isdigit():
+                        grid_distances[m][n] = 'I'
+
+
+raster(grid_distances)
+raster_inside(grid_distances)
+
+counter = 0
+
+def symbolize_pipes(s: str) -> str:
+    return (s.replace('\\', '┐').replace('F', '┌')
+            .replace('J', '┘').replace('L', '└')
+            .replace('|', '│').replace('-', '─'))
+
+
+def display_1(grid, grid_distances):
+    counter: int = 0
+
+    for m in range(len(grid_distances)):
+        for n in range(len(grid_distances[m])):
+            if type(grid_distances[m][n]) is int:
+                e = symbolize_pipes(grid[m][n])
+            else:
+                e = grid_distances[m][n]
+            if e == 'I':
+                counter += 1
+                e = f"{Fore.BLUE}I{Style.RESET_ALL}"
+            else:
+                e = f"{Style.DIM}{e}{Style.RESET_ALL}"
+            print('{:1s}'.format(str(e)), end='')
+        print()
+    print(counter)
+
+
+def display_2(grid, grid_distances):
+    counter: int = 0
+    for m in range(len(grid_distances)):
+        for n in range(len(grid_distances[m])):
+            if type(grid_distances[m][n]) is int:
+                e = f"{grid_distances[m][n]:2d} "
+            elif grid_distances[m][n] == 'I':
+                counter += 1
+                e = f"{Fore.BLUE} I {Style.RESET_ALL}"
+            else:
+                e = f"{grid_distances[m][n]:2s} "
+                e = f"{Style.DIM}{e}{Style.RESET_ALL}"
+            print('{:1s}'.format(str(e)), end='')
+        print()
+    print(counter)
+
+display_1(grid, grid_distances)
+
