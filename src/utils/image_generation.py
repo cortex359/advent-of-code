@@ -9,6 +9,7 @@ from dotenv import load_dotenv
 import openai
 from openai import AzureOpenAI
 import json
+import subprocess
 
 logging.basicConfig(filename='queries.log', encoding='utf-8', level=logging.INFO)
 
@@ -116,8 +117,14 @@ def download_and_save_img(folder: str, image_url: str):
         with open(image_save_path, 'wb') as f:
             shutil.copyfileobj(res.raw, f)
         print('Image sucessfully Downloaded: ', image_save_path)
+        return image_save_path
     else:
         print('Image Couldn\'t be retrieved')
+
+
+def optipng(file: str):
+    assert os.path.isfile(file) and file.endswith(".png"), "File not found or not a PNG file"
+    subprocess.run(["optipng", file])
 
 
 ##################################
@@ -139,4 +146,5 @@ combined_prompt = pre_prompt + scene_description
 print('Länge des kombinierten Prompts = {}'.format(len(combined_prompt)))
 
 result_data = generate_image(combined_prompt)
-download_and_save_img(folder, result_data['url'])
+image_save_path = download_and_save_img(folder, result_data['url'])
+optipng(image_save_path)
