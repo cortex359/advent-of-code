@@ -204,44 +204,26 @@ def slice_ranges(a: set[tuple[int, int]], b: set[tuple[int, int]]) -> set[tuple[
 def gen_configuration(broken: int, operational: int) -> str:
     return str(itertools.repeat('#', broken)) + str(itertools.repeat('.', operational))
 
-
-data = [".?????.????.#?.???? 4,3,1,1,1"]
-max_num = 0
-for l in data:
-    s = l.split()[0]
-    t = l.split()[1].split(',')
-
-    segments: list = []
-    segment_length = 0
-    for i in range(len(s)):
-        if s[i] == '#' or s[i] == '?':
-            # enter big segment
-            segment_length += 1
-        if (s[i] == '.' or i == len(s)-1) and segment_length > 0:
-            # leave big segment
-            segments.append(segment_length)
-            segment_length = 0
-    # [5, 4, 2, 4]
-    # .?????.????.#?.????
-    # .-----.----.#-.----
-    print(segments)
-
-
 def test_line(line: list, counts: list) -> int:
-    for
+    return 1 if list(map(int, counts)) == list(map(lambda x: len(x), re.split(r"\.+", ''.join(line)))) else 0
 
-def permute_rest(line: list, index: int, stack: list, counts: list) -> int:
-    if index >= len(list):
-        return test_line(line)
+def permute_rest(line: list, index: int, stack: list) -> int:
+    if index >= len(line):
+        return test_line(line, stack)
+    while line[index] != '?' and index < len(line):
+        index += 1
     if line[index] == '?':
         line_a = line.copy()
         line_a[index] = '.'
 
         line_b = line.copy()
         line_b[index] = '#'
-        if line_b[:index+1].count('#') <= stack.popleft():
-            return permute_rest(line_a, index + 1, stack, counts) + permute_rest(line_b, index + 1, stack, counts)
-        else:
-            return permute_rest(line_a, index + 1, stack, counts)
+        return permute_rest(line_a, index + 1, stack) + permute_rest(line_b, index + 1, stack)
+    permute_rest(line, index, stack)
 
-print(list(itertools.permutations('.#', 2)))
+data = [".?????.????.#?.???? 4,3,1,1,1"]
+max_num = 0
+for l in data:
+    s = list(l.split()[0])
+    t = l.split()[1].split(',')
+    print(permute_rest(s, 0, t))
