@@ -222,20 +222,33 @@ def raster(grid_distances):
 
 
 
-def raster_inside(grid_distances):
+def raster_inside(grid, grid_distances):
     for m in range(len(grid_distances)):
+        inside = False
         for n in range(len(grid_distances[m])):
-            if grid_distances[m][n] == '.':
-                neighbors = get_neighbors(grid_distances, m, n)
-                for ne in neighbors:
-                    if type(ne) is int or ne.isdigit():
-                        grid_distances[m][n] = 'I'
-
-
-raster(grid_distances)
-raster_inside(grid_distances)
-
-counter = 0
+            # only pipe segments of the main loop have been replaced by ints in grid_distances
+            if type(grid_distances[m][n]) is int:
+                if not inside:
+                    if grid[m][n] in ('|', 'S'):
+                        inside = True
+                    if grid[m][n] in ('F', 'L'):
+                        entered_with = grid[m][n]
+                else:
+                    if grid[m][n] in ('|', 'S'):
+                        inside = False
+                    elif grid[m][n] == 'J' and entered_with == 'L':
+                        inside = False
+                    elif grid[m][n] == 'J' and entered_with == 'F':
+                        inside = True
+                    elif grid[m][n] == '\\' and entered_with == 'L':
+                        inside = True
+                    elif grid[m][n] == '\\' and entered_with == 'F':
+                        inside = False
+            if grid[m][n] == '.':
+                if inside:
+                    grid_distances[m][n] = 'I'
+                else:
+                    grid_distances[m][n] = 'O'
 
 def symbolize_pipes(s: str) -> str:
     return (s.replace('\\', '┐').replace('F', '┌')
@@ -277,6 +290,12 @@ def display_2(grid, grid_distances):
             print('{:1s}'.format(str(e)), end='')
         print()
     print(counter)
+
+raster(grid_distances)
+display_1(grid, grid_distances)
+print(grid[4])
+print(grid_distances[4])
+raster_inside(grid, grid_distances)
 
 display_1(grid, grid_distances)
 
