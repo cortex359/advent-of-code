@@ -220,10 +220,11 @@ def permute_rest(line: list, index: int, stack: list) -> int:
         line_b[index] = '#'
         return permute_rest(line_a, index + 1, stack) + permute_rest(line_b, index + 1, stack)
     permute_rest(line, index, stack)
+def calc_arrangements_in_segment(s_len: int, req: list) -> int:
+    pass
 
-data = [".?????.????.#?.???? 4,3,1,1,1"]
-max_num = 0
+#data = [".?????.????.#?.???? 4,3,1,1,1"]
 for l in data:
     s = list(l.split()[0])
-    t = l.split()[1].split(',')
-    print(permute_rest(s, 0, t))
+    t = list(map(int, l.split()[1].split(',')))
+    print(f"{''.join(s):20s} - len={len(s):2d}, broken {s.count('#')}/{sum(t)}, left={sum(t) - s.count('#')}")
