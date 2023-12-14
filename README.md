@@ -1,10 +1,10 @@
-# :christmas_tree: Advent of Code :gift:
+# Advent of Code solutions
 
 <!--
 ![](https://img.shields.io/badge/stars%20⭐-32-yellow) ![](https://img.shields.io/badge/days%20completed-16-red)
 -->
 
-A somewhat competitive Python :snake: learning experience. 
+:christmas_tree: A somewhat competitive Python :snake: learning experience. :gift:
 
 ![](imgs/aoc_2023.png)
 
@@ -21,13 +21,22 @@ Oh, and you might want to consider [supporting Advent of Code](https://adventofc
 
 Start new day:
 ```shell
-python src/utils/new_file.py 1 2023
+./src/utils/new.zsh
 ```
 
-Extract example:
+Generate a new image with DALL·E 3 by extracting the storyline of the puzzle with GPT-3.5 and generating a visual 
+description of a scene to pass along:
 ```shell
-pcre2grep -Me '(?:[`]{3}[\n\s]*)([^`]+)(?:[`]{3})' -m1 --output '$1' puzzle.md > example
+python src/utils/image_generation.py src/2023/day01/puzzle.md  
 ```
+
+
+Generate some emojis (GitHub Markdown) to describe the story for use in the commit message:
+```shell
+cat src/2023/day01/puzzle.md | python ext/emojis.py
+```
+-> :snowflake: :star2: :1234: :memo: :abacus: :elf:
+
 
 ## Santa Hacking…
 ![](imgs/santa_hacking_2023.png)
