@@ -1,10 +1,10 @@
-# Advent of Code solutions
+# :christmas_tree: Advent of Code :gift: Python Solutions 
 
 <!--
 ![](https://img.shields.io/badge/stars%20⭐-32-yellow) ![](https://img.shields.io/badge/days%20completed-16-red)
 -->
 
-:christmas_tree: A somewhat competitive Python :snake: learning experience. :gift:
+A somewhat competitive Python 🐍 learning experience. 🎄
 
 ![](imgs/aoc_2023.png)
 
