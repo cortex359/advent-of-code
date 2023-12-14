@@ -7,11 +7,15 @@ __pycache__
 .idea
 
 session.cookie
-#puzzle.md
+.session.cookie
 check.py
+alt.py
 .env
 queries.logvenv
+queries.log
 venv
+
 puzzle.md
 input
+
 .directory
