@@ -12,13 +12,13 @@ load_dotenv(".env")
 model_config: dict = {
     'text_model': 'gpt-35-turbo-1106',
     'pricing': 0.003,
-    'with_description': True
-}
-model_config: dict = {
-    'text_model': 'gpt-4-turbo',
-    'pricing': 0.010,
     'with_description': False
 }
+#model_config: dict = {
+#    'text_model': 'gpt-4-turbo',
+#    'pricing': 0.010,
+#    'with_description': False
+#}
 
 
 ###

@@ -140,7 +140,16 @@ v5 = "You will be given a file with a puzzle and a story about Christmas elves w
 pre_prompt = "I NEED to test how the tool works with extremely simple prompts. DO NOT add any detail, just use it AS-IS:\n"
 pre_prompt += "Generate a vibrant, high-definition 3D animation style image in a fantasy setting from the following description. Do NOT show any text. Ensure that the image is imaginative and vibrant, without depicting any sensitive or prohibited content. Use a rich and varied color palette, with a predominance of blues, greens and reds that evoke a sense of wonder and tranquility. Description: "
 
-scene_description = generate_prompt(v5, file_content)
+# check if file exists
+if not os.path.isfile(folder + 'README.md'):
+    logging.error("Create new story:")
+    with open(folder + 'README.md', 'w') as file:
+        scene_description = generate_prompt(v5, file_content)
+        file.write(scene_description)
+else:
+    with open(folder + 'README.md') as file:
+        scene_description = file.read()
+
 combined_prompt = pre_prompt + scene_description
 
 print('Länge des kombinierten Prompts = {}'.format(len(combined_prompt)))
