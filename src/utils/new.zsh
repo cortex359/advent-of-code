@@ -42,7 +42,7 @@ if (( target_seconds > $(date +%s) )); then {
         current_seconds=$(date +%s)
         time_left=$(( target_seconds - current_seconds ))
         (( time_left < 3 )) && break
-        print -P "\r %F{blue}%B${time_left}%b seconds%f"
+        print -P "\r\r%F{blue}%B${time_left}%b seconds%f"
         sleep 0.5
     }; done
 

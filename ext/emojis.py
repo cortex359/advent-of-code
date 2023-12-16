@@ -119,12 +119,13 @@ def test_answer(answer: str) -> bool:
         if github_emojis.get(m):
             correct += 1
         else:
-            print(m)
+            print(f"github is missing {m}")
     print(f"{correct} / {emojis}")
 
 def emojify_str(text: str) -> str:
     for m in re.findall(r':([a-z0-9_-]+):', text):
-        text = text.replace(f":{m}:", unicode_symbols[github_emojis[m]])
+        if github_emojis.get(m):
+            text = text.replace(f":{m}:", unicode_symbols[github_emojis[m]])
     return text
 
 with open(0) as stdin:
