@@ -6,25 +6,26 @@ import sys
 from dotenv import load_dotenv
 from openai import AzureOpenAI
 import tiktoken
-load_dotenv(".env")
+from utils import num_token_from_string
 
+load_dotenv(".env")
 
 model_config: dict = {
     'text_model': 'gpt-35-turbo-1106',
     'pricing': 0.003,
     'with_description': False
 }
-#model_config: dict = {
+# model_config: dict = {
 #    'text_model': 'gpt-4-turbo',
 #    'pricing': 0.010,
 #    'with_description': False
-#}
+# }
 
 
 ###
 ### Erstellt mit:
 ### < emoji-unicode.txt sed -Ee '/^#|^$/d ; s/\s+;\s+(minimally-qualified|fully-qualified|unqualified|component)\s+#([^E]+)\sE[0-9\.]+/\2/1' >| emoji-unicode.sed.txt
-with open('ext/emoji-unicode.sed.txt') as file:
+with open('../ext/emoji-unicode.sed.txt') as file:
     data: list[str] = [line.removesuffix("\n") for line in file]
 
 unicode_cldr: dict[str, str] = {}
@@ -36,12 +37,12 @@ for line in data:
             code_point = s.lower()
         else:
             code_point += '-' + s.lower()
-    emoji_symbol = line[len(code_point):len(code_point)+3]
-    description = line[len(code_point)+2:].strip()
+    emoji_symbol = line[len(code_point):len(code_point) + 3]
+    description = line[len(code_point) + 2:].strip()
     unicode_cldr[code_point] = description
     unicode_symbols[code_point] = emoji_symbol
 
-with open('ext/github-emojis.json') as file:
+with open('../ext/github-emojis.json') as file:
     github_emojis: dict[str, str] = json.load(file)
 
 descriptions: list[str] = []
@@ -56,20 +57,6 @@ for k, url in github_emojis.items():
         descriptions.append(f":{k}: {unicode_cldr.get(code_point, k)}")
     else:
         descriptions.append(f":{k}:")
-
-
-
-def num_token_from_string(string: str, encoding_name: str = 'cl100k_base') -> int:
-    """Returns the number of tokens in a text string."""
-    # | Encoding name       | OpenAI models                                    |
-    # |---------------------|--------------------------------------------------|
-    # | cl100k_base         | gpt-4, gpt-3.5-turbo, text-embedding-ada-002     |
-    # | p50k_base           | Codex models, text-davinci-002, text-davinci-003 |
-    # | r50k_base (or gpt2) | GPT-3 models like davinci                        |
-    # |---------------------|--------------------------------------------------|
-    encoding = tiktoken.get_encoding(encoding_name)
-    num_tokens = len(encoding.encode(string))
-    return num_tokens
 
 
 def generate_prompt(descriptions: list[str], user_prompt: str) -> str:
@@ -98,18 +85,20 @@ def generate_prompt(descriptions: list[str], user_prompt: str) -> str:
     user_token = num_token_from_string(user_prompt)
     print(f"System: {system_token} token")
     print(f"User: {user_token} token")
-    print(f"Total: {system_token + user_token} token at {model_config['pricing']:.4f} €/1kToken ({model_config['text_model']}) -> {(system_token + user_token)/1000 * model_config['pricing']:4.2f} €")
+    print(
+        f"Total: {system_token + user_token} token at {model_config['pricing']:.4f} €/1kToken ({model_config['text_model']}) -> {(system_token + user_token) / 1000 * model_config['pricing']:4.2f} €")
 
     response = client.chat.completions.create(
         model=model_config['text_model'],
         messages=message_text,
         temperature=0.3,
-        #max_tokens=800
+        # max_tokens=800
     )
 
     answer = response.choices[0].message.content
     print('{}'.format(answer))
     return answer
+
 
 def test_answer(answer: str) -> bool:
     emojis = 0
@@ -122,11 +111,13 @@ def test_answer(answer: str) -> bool:
             print(f"github is missing {m}")
     print(f"{correct} / {emojis}")
 
+
 def emojify_str(text: str) -> str:
     for m in re.findall(r':([a-z0-9_-]+):', text):
         if github_emojis.get(m):
             text = text.replace(f":{m}:", unicode_symbols[github_emojis[m]])
     return text
+
 
 with open(0) as stdin:
     story = '\n'.join(stdin.readlines())
