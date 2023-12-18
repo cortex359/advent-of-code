@@ -6,7 +6,7 @@ import itertools
 
 # d = defaultdict(int)  # Default to int (0)
 
-with open("example") as file:
+with open("input") as file:
     data: list = [line.removesuffix("\n") for line in file]
 
 # Parsing Stuff
@@ -18,7 +18,7 @@ grid: list[list] = [list(line) for line in data]
 # -----------
 def line_to_list_of_ints(line):
     """Convert a line of numbers to a list of ints"""
-    return list(map(int, re.findall(r'\d+', line)))
+    return list(digging_plan(int, re.findall(r'\d+', line)))
 
 
 def get_fullstr_by_pointing_to_segment(line: str, index: int, chars: str = "01234567890", valid: bool = True) -> str:
@@ -201,41 +201,66 @@ def slice_ranges(a: set[tuple[int, int]], b: set[tuple[int, int]]) -> set[tuple[
 
     return sliced_boundaries
 
+def display_grid(grid) -> None:
+    """Display a 2D Grid"""
+    print("\nGrid:")
+    for line in grid:
+        for e in line:
+            if e == 0:
+                print(".", end="")
+            elif e == 1:
+                print("#", end="")
+        print("")
 
-map = np.zeros((600, 600), dtype=int)
+
+def is_inside(line, n) -> bool:
+    crossing = 0
+    for i in range(len(line)):
+        inside = False
+        if line[i] == '#' and line[i-1] != '#':
+            if line[i+1:-1].count('#') > 0:
+                inside = True
+        if i == n:
+            return inside
+
+digging_plan = np.zeros((600, 600), dtype=int)
 start = (300, 300)
-facing = 0
 directions = [(-1, 0), (1, 0), (0, -1), (0, 1)]
 for l in data:
     direction = l.split(" ")[0]
     length = int(l.split(" ")[1])
     color = l.split(" ")[2][2:-2]
     print(direction, length, color)
+
     if direction == 'U':
-        end = (start[0] + directions[(0+facing) % 4][0] * length, start[1] + directions[(0+facing) % 4][1] * length)
-        map[start[0]:end[0]+1, start[1]:end[1]+1] = 1
-        facing = 0
+        end = (start[0] + directions[0][0] * length, start[1] + directions[0][1] * length)
+        digging_plan[end[0]:start[0] + 1, start[1]:end[1] + 1] = 1
     elif direction == 'D':
-        end = (start[0] + directions[(1+facing) % 4][0] * length, start[1] + directions[(1+facing) % 4][1] * length)
-        map[start[0]:end[0]+1, start[1]:end[1]+1] = 1
-        facing = 1
+        end = (start[0] + directions[1][0] * length, start[1] + directions[1][1] * length)
+        digging_plan[start[0]:end[0] + 1, start[1]:end[1] + 1] = 1
     elif direction == 'L':
-        end = (start[0] + directions[(2+facing) % 4][0] * length, start[1] + directions[(2+facing) % 4][1] * length)
-        map[start[0]:end[0]+1, start[1]:end[1]+1] = 1
-        facing = 2
+        end = (start[0] + directions[2][0] * length, start[1] + directions[2][1] * length)
+        digging_plan[start[0]:end[0] + 1, end[1]:start[1] + 1] = 1
     elif direction == 'R':
-        end = (start[0] + directions[(3+facing) % 4][0] * length, start[1] + directions[(3+facing) % 4][1] * length)
-        map[start[0]:end[0]+1, start[1]:end[1]+1] = 1
-        facing = 3
+        end = (start[0] + directions[3][0] * length, start[1] + directions[3][1] * length)
+        digging_plan[start[0]:end[0] + 1, start[1]:end[1] + 1] = 1
+
     start = end
 
+display_grid(digging_plan)
 
-for m in range(len(map)):
-    outside = True
-    for n in range(len(map[0])):
-        if map[m][n] == 1:
-            outside = not outside
-        if not outside:
-            map[m][n] = 1
+for m in range(len(digging_plan)):
+    for n in range(len(digging_plan[0])):
+        inside = False
+        if digging_plan[m, n] == 1 and digging_plan[m, n+1] == 0 and not inside:
+            if np.sum(digging_plan[m, n+1:-1]) > 0:
+                inside = True
+        if digging_plan[m, n-1] == 0 and digging_plan[m, n] == 1 and inside:
+            inside = False
 
-print(np.sum(map))
+        if inside:
+            digging_plan[m, n] = 1
+
+display_grid(digging_plan)
+
+print(np.sum(digging_plan))
