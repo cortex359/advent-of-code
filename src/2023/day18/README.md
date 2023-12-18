@@ -1,0 +1,5 @@
+In the story, Christmas elves are working hard to catch up with a backlog of parts requests at a machine parts factory, which requires a large supply of lava. To accommodate this need, they have begun constructing a large lagoon near the factory. The lagoon is designed to hold the lava, but the elves are uncertain if it will be large enough and have asked for an assessment of the dig plan.
+
+The lagoon is created by digging trenches according to specific instructions, which include directions and distances to dig in each direction—up, down, left, or right. The trenches are also painted with colors indicated by RGB hexadecimal color codes. The initial phase results in a loop of trench around ground-level terrain. The next step involves digging out the interior to a depth of one meter and painting the edges as per the color codes.
+
+The story focuses on the challenge of ensuring the lagoon can hold enough lava to meet the factory's needs. The elves are concerned about the lagoon's capacity and are seeking help to determine if their dig plan will result in a lagoon that can contain the required volume of lava.
