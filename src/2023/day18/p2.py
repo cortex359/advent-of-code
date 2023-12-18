@@ -6,6 +6,8 @@ import itertools
 
 from shapely import Point
 from shapely.geometry import Polygon
+from shapely.ops import transform
+from shapely.ops import cascaded_union
 import matplotlib.pyplot as plt
 import geopandas as gpd
 
@@ -27,20 +29,30 @@ def display_grid(grid) -> None:
                 print("#", end="")
         print("")
 
-def display_lagoon(edges) -> None:
-    p = gpd.GeoSeries(Polygon(edges))
+def display_lagoon(polygon) -> None:
+    p = gpd.GeoSeries(polygon)
     p.plot()
-    plt.show()
-    plt.savefig("part1.png")
-    #print(f"Area: {p.area}, Length: {p.length}")
-
+    #plt.show()
+    plt.savefig("part2.2.png")
 
 digging_plan: list[tuple[int, int]] = []
 start = (0, 0)
 for l in data:
+    # Path 1
     direction = l.split(" ")[0]
     length = int(l.split(" ")[1])
-    color = l.split(" ")[2][2:-2]
+
+    # Path 2
+    color = l.split(" ")[2][2:-1]
+    if color[-1] == '0':
+        direction = 'R'
+    elif color[-1] == '1':
+        direction = 'D'
+    elif color[-1] == '2':
+        direction = 'L'
+    elif color[-1] == '3':
+        direction = 'U'
+    length = int(color[0:-1], base=16)
 
     if direction == 'U':
         end = (start[0], start[1] + length)
@@ -54,7 +66,6 @@ for l in data:
     digging_plan.append(end)
     start = end
 
-display_lagoon(digging_plan)
 
 def count_points(polygon) -> int:
     # Get the bounds of the polygon
@@ -71,6 +82,19 @@ def count_points(polygon) -> int:
 
     return count
 
+polygon_a = Polygon(digging_plan)
+polygon_b = transform(lambda x, y: (x + 1, y), polygon_a)
+polygon_c = transform(lambda x, y: (x, y + 1), polygon_a)
+polygon_d = transform(lambda x, y: (x + 1, y + 1), polygon_a)
+
+polygons = [polygon_a, polygon_b, polygon_c, polygon_d]
+
+display_lagoon(polygons)
+
+u = cascaded_union(polygons)
+print("93325932219961 to high")
+print(u.area)
+
 # Use the function
-grid = count_points(Polygon(digging_plan))
-print(grid)
+#grid = count_points(Polygon(digging_plan))
+#print(grid)
