@@ -1,1 +1,23 @@
-In the story, elves are working in a factory city on Gear Island, where they are filling large, top-heavy crucibles with lava to transport to a machine parts factory. The crucibles are on wheels and are difficult to steer at high speeds, especially in a straight line. The elves have a map that calculates heat loss for each city block, and they must find the best route to minimize this heat loss while also not going straight for too long due to the steering difficulty. The starting point is a lava pool, and the destination is the factory, both located at opposite corners of the map. The elves must navigate the crucible through the city, making sure to turn before reaching the limit of three consecutive blocks in one direction.
+# Day 17: Clumsy Crucible
+
+Once upon a time on Gear Island, the lava flowed rapidly from the Lava Production Facility. As the reindeer offered a
+parachute, an elf descended with a bird's-eye view of the giant factory city below. The lava pool at the base of the
+lavafall was being loaded into top-heavy crucibles on wheels by the elves.
+
+The crucibles, difficult to steer at high speeds, needed to be maneuvered from the lava pool to the machine parts
+factory. The goal was to minimize heat loss while avoiding long straight paths. The map provided by the elves detailed
+the heat loss in each city block, with the starting point at the top-left and the destination at the bottom-right.
+
+The crucible could move at most three blocks in a single direction before turning 90 degrees left or right. It couldn't
+reverse direction and could only turn left, continue straight, or turn right after entering each city block.
+
+The elves found a path that minimized heat loss, never moving more than three consecutive blocks in the same direction,
+with a total heat loss of only 102.
+
+Now, it's your turn to direct the crucible from the lava pool to the machine parts factory, minimizing heat loss and
+avoiding long straight paths. What is the least heat loss it can incur?
+
+The elves eagerly await your solution, as the fate of the machine parts factory depends on it.
+
+![img_01.png](img_01.png)
+![img_02.png](img_02.png)
