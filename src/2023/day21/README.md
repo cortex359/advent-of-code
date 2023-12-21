@@ -2,6 +2,8 @@
 
 :elf: :snowflake: :seedling: :world_map: :chart_with_upwards_trend: :pick:
 
+$$g(i) = 15.024 \cdot i^2 + 15.114 \cdot i + 3.814$$
+
 In the story, Christmas elves are working to restore snow to Snow Island by filtering water with sand. An elf, known for
 his problem-solving skills, is approached by a fellow elf who works with a gardener on a massive farm. This elf needs to
 complete his daily step goal using a pedometer and seeks assistance in determining which garden plots he can reach with

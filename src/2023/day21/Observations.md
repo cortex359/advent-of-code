@@ -48,5 +48,4 @@ The graph is unweighted, cyclic and undirected.
 
 Sei $d=65$ die Startposition im Gitter, $n=131$ die Länge des Gitters und $s=26.501.365$ die Anzahl der Schritt.
 Wir definieren $i := \frac{s - 65}{131} + 1$ als relevante Vielfache und erhalten eine Funktion $g(i)$ für die Anzahl der Gartenbeete in Abhängigkeit von $i$.
-$$g(i) = 15.024 \cdot i^2 - 14.934 \cdot i + 3.724$$
-
+$$g(i) = 15.024 \cdot i^2 + 15.114 \cdot i + 3.814$$
