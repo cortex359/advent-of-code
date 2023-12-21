@@ -12,3 +12,5 @@ specific number of garden plots within his step limit.
 
 ![img_01.png](img_01.png)
 ![img_02.png](img_02.png)
+![img_03.png](img_03.png)
+![img_04.png](img_04.png)

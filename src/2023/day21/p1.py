@@ -150,7 +150,6 @@ def get_reachables(graph, start, length):
                     queue.append((n, level + 1))
     return reachable_nodes
 
-
 steps = 64
 graph = create_graph_from_grid(grid, start)
 

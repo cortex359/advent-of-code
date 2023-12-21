@@ -124,9 +124,25 @@ for x_i in range(1, len(x_sorted)):
                     not_accepted_combinations += not_accepted_in_range
         print(f"Progress: {progress_counter / 50493360.50} %, total {progress_counter} checks")
 
-#print("167409079868000 (expected)")
 print(f"{accepted_combinations} (accepted_combinations) ")
 
 print(f"Expected total:\n {4000 ** 4}")
 print(f"accepted + not accepted = total: {accepted_combinations} + {not_accepted_combinations} =\n {accepted_combinations + not_accepted_combinations}")
 print(f"Problematic: {1 - ((accepted_combinations + not_accepted_combinations) / 4000 ** 4)}")
+
+
+# Output after ~ 22h, lol =D
+# …
+# Progress: 96.20071838949994 %, total 4857497554 checks
+# Progress: 96.2020000233496 %, total 4857562268 checks
+# Progress: 96.20328165719927 %, total 4857626982 checks
+# Progress: 96.20456329104893 %, total 4857691696 checks
+# Progress: 96.20584492489859 %, total 4857756410 checks
+# Progress: 96.20712655874826 %, total 4857821124 checks
+# Progress: 96.20840819259791 %, total 4857885838 checks
+# 141882534122898 (accepted_combinations)
+# Expected total:
+# 256000000000000
+# accepted + not accepted = total: 141882534122898 + 114117465877102 =
+# 256000000000000
+# Problematic: 0.0
