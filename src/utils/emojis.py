@@ -25,7 +25,7 @@ model_config: dict = {
 ###
 ### Erstellt mit:
 ### < emoji-unicode.txt sed -Ee '/^#|^$/d ; s/\s+;\s+(minimally-qualified|fully-qualified|unqualified|component)\s+#([^E]+)\sE[0-9\.]+/\2/1' >| emoji-unicode.sed.txt
-with open('ext/emoji-unicode.sed.txt') as file:
+with open('var/emoji-unicode.sed.txt') as file:
     data: list[str] = [line.removesuffix("\n") for line in file]
 
 unicode_cldr: dict[str, str] = {}
@@ -42,7 +42,7 @@ for line in data:
     unicode_cldr[code_point] = description
     unicode_symbols[code_point] = emoji_symbol
 
-with open('ext/github-emojis.json') as file:
+with open('var/github-emojis.json') as file:
     github_emojis: dict[str, str] = json.load(file)
 
 descriptions: list[str] = []
