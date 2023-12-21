@@ -21,7 +21,8 @@ def get_neighbor_coordinates(grid, zeile: int, spalte: int) -> list[tuple[int, i
     return neighbors
 
 
-def create_graph_from_grid(grid: [list[list], np.ndarray], start: tuple[int, int]) -> dict[tuple[int, int], list[tuple[int, int]]]:
+def create_graph_from_grid(grid: [list[list], np.ndarray], start: tuple[int, int]) -> dict[
+    tuple[int, int], list[tuple[int, int]]]:
     """Create a Graph from a 2D Grid"""
     graph: dict[tuple[int, int], list[tuple[int, int]]] = {}
     visited, queue = set(), deque([start])
@@ -40,7 +41,8 @@ def create_graph_from_grid(grid: [list[list], np.ndarray], start: tuple[int, int
     return graph
 
 
-def visualize_graph(graph: dict[tuple[int, int], list[tuple[int, int]]], reachable_nodes: set[tuple[int, int]], save_path: str = None):
+def visualize_graph(graph: dict[tuple[int, int], list[tuple[int, int]]], reachable_nodes: set[tuple[int, int]],
+                    save_path: str = None):
     """Visualize a directed graph with Matplotlib"""
     G = nx.Graph()
     unreachable_nodes = set(graph.keys()) - reachable_nodes
@@ -70,6 +72,7 @@ def visualize_graph(graph: dict[tuple[int, int], list[tuple[int, int]]], reachab
     else:
         plt.show()
 
+
 def get_reachables(G, start, length):
     len_modulo = length % 2
     visited, queue = set(), deque([(start, 0)])
@@ -86,22 +89,23 @@ def get_reachables(G, start, length):
                     queue.append((n, level + 1))
     return reachable_nodes
 
+
 def run_simulation(si: int, np_grid, start):
     steps = 65 + si * 131
 
     grid_expansions = ((steps - start[0]) // len(grid) + 1) * 2 + 1
-    #print(f"Expanding grid {grid_expansions} times in both directions")
+    # print(f"Expanding grid {grid_expansions} times in both directions")
 
     super_grid = np.tile(np_grid, (grid_expansions, grid_expansions))
-    start = (start[0] + (grid_expansions//2) * len(grid), start[1] + (grid_expansions//2) * len(grid[0]))
-    #print(f"New starting position {start} in a {len(super_grid)}x{len(super_grid[0])} grid")
+    start = (start[0] + (grid_expansions // 2) * len(grid), start[1] + (grid_expansions // 2) * len(grid[0]))
+    # print(f"New starting position {start} in a {len(super_grid)}x{len(super_grid[0])} grid")
     graph = create_graph_from_grid(super_grid, start)
-    #print(f"Graph initialized with {len(graph)} nodes. Checking for nodes reachable in exactly {steps} steps...")
+    # print(f"Graph initialized with {len(graph)} nodes. Checking for nodes reachable in exactly {steps} steps...")
     reachable_nodes = get_reachables(graph, start, steps)
-    #print(f"Number of reachable nodes, exactly {steps} steps away from {start}: {len(reachable_nodes)}")
+    # print(f"Number of reachable nodes, exactly {steps} steps away from {start}: {len(reachable_nodes)}")
 
     # markdown table:
-    #print(f"| {si} | {steps} | {start} | {len(super_grid)}x{len(super_grid[0])} | {len(reachable_nodes)} |")
+    # print(f"| {si} | {steps} | {start} | {len(super_grid)}x{len(super_grid[0])} | {len(reachable_nodes)} |")
     return len(reachable_nodes)
 
 
@@ -111,7 +115,7 @@ grid: list[list] = [list(line) for line in data]
 
 # start pos:    S (garden plot)
 start = [(i, j) for i in range(len(grid)) for j in range(len(grid[0])) if grid[i][j] == 'S'][0]
-#print(f"Original starting position {start} in a {len(grid)}x{len(grid[0])} grid")
+# print(f"Original starting position {start} in a {len(grid)}x{len(grid[0])} grid")
 
 # normalize grid after original startposition has been determined
 grid[start[0]][start[1]] = '.'
@@ -127,7 +131,7 @@ print(f"First 3 garden plot numbers: {plot_numbers}")
 
 print(f"Solving linear equation system for {degree + 1} unknown...")
 X = np.array(list(range(degree + 1)), dtype=np.int_)
-A = np.array([X**i for i in range(degree + 1)]).T
+A = np.array([X ** i for i in range(degree + 1)]).T
 b = np.array(plot_numbers, dtype=np.int_)
 
 poly = Polynomial(np.linalg.solve(A, b), symbol='i')

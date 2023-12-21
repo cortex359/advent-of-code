@@ -1,13 +1,8 @@
-import re
-import numpy as np
-from collections import deque
-from collections import defaultdict
-import itertools
 import sys
-import networkx as nx
-import matplotlib.pyplot as plt
+from collections import deque
 
-sys.setrecursionlimit(1000)
+import matplotlib.pyplot as plt
+import networkx as nx
 
 file_path = sys.argv[1] if len(sys.argv) > 1 else 'input'
 
@@ -117,12 +112,10 @@ def visualize_nx_graph(graph: nx.Graph):
 
 
 # ungewichtet, zyklisch und ungerichtet
-
-
 # G = make_graph_with_nx(grid, start)
 # visualize_nx_graph(G)
 
-## Not computeable
+## Not computable
 def path_of_length_exists(graph, start, end, length):
     queue = deque([(start, 0)])
     while queue:
@@ -149,6 +142,7 @@ def get_reachables(graph, start, length):
                 for n in set(graph[vertex]) - visited:
                     queue.append((n, level + 1))
     return reachable_nodes
+
 
 steps = 64
 graph = create_graph_from_grid(grid, start)
