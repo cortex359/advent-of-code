@@ -1,25 +1,13 @@
 import re
 import json
-import os
-import sys
 
-from dotenv import load_dotenv
-from openai import AzureOpenAI
-import tiktoken
-from utils import num_token_from_string
+from utils import print_token_usage, model_configs, client
 
-load_dotenv(".env")
 
-model_config: dict = {
-    'text_model': 'gpt-35-turbo-1106',
-    'pricing': 0.003,
-    'with_description': False
-}
-# model_config: dict = {
-#    'text_model': 'gpt-4-turbo',
-#    'pricing': 0.010,
-#    'with_description': False
-# }
+model_config: dict = model_configs['high']
+
+model_config['with_description'] = False
+model_config['with_emoji_list'] = False
 
 
 ###
@@ -59,62 +47,60 @@ for k, url in github_emojis.items():
         descriptions.append(f":{k}:")
 
 
-def generate_prompt(descriptions: list[str], user_prompt: str) -> str:
-    client = AzureOpenAI(
-        azure_endpoint=os.getenv("AZURE_ENDPOINT"),
-        api_key=os.getenv("AZURE_OPENAI_API_KEY"),
-        api_version="2023-05-15"
-    )
+def create_system_prompt() -> str:
+    system_prompt: str = ""
+    if model_config['with_emoji_list']:
+        system_prompt += "You will be given a story description and you will respond with up to 10 emojis that are representative of the story. Your answer should not contain anything else but the emojis. Each emoji is represented like this :emoji_name:. "
 
-    system_prompt = "You are a simple and helpful AI. You will be given a story description and you will respond with up to six emojis that are representative of the story. Your answer should not contain anything else but the emojis. Each emoji is represented like this :emoji_name:. "
-    if model_config['with_description']:
-        system_prompt += "The following is a list of emojis you can choose from, followed by a short description.\n"
+        if model_config['with_description']:
+            system_prompt += "The following is a list of emojis you can choose from, followed by a short description.\n"
+        else:
+            system_prompt += "The following is a list of emojis you can choose from:\n"
+
         system_prompt += '\n'.join(descriptions)
+
+        system_prompt += '\nRemember to only answer with up to 10 representative emojis, separated by a single whitespace.'
     else:
-        system_prompt += "The following is a list of emojis you can choose from:\n"
-        system_prompt += ' '.join(descriptions)
+        system_prompt += "Based on a brief description of a story, provide a set of up to 10 emojis that capture the main plot elements. Ensure that the emojis are supported by GitHub Markdown. When the story's description does not specify certain details, aim for a diverse representation in your emoji choices. For example, use :elf_woman: instead of the more generic :elf:, or :couple_with_heart_man_man: instead of the broader :couple_with_heart:, where appropriate. Focus on capturing significant events, settings, or unique aspects of the narrative in a way that allows someone familiar with the story to recognize it. Remember, no text or explanations should be included, only the emojis that best convey the story's core plot points in a diverse and inclusive manner."
 
-    system_prompt += '\nRemember to only answer with up to six representative emojis, separated by a single whitespace.'
+    return system_prompt
 
+def generate_prompt(system_prompt: str, user_prompt: str) -> str:
     message_text: list[dict] = [
         {"role": "system", "content": system_prompt},
         {"role": "user", "content": user_prompt}
     ]
 
-    system_token = num_token_from_string(system_prompt)
-    user_token = num_token_from_string(user_prompt)
-    print(f"System: {system_token} token")
-    print(f"User: {user_token} token")
-    print(
-        f"Total: {system_token + user_token} token at {model_config['pricing']:.4f} €/1kToken ({model_config['text_model']}) -> {(system_token + user_token) / 1000 * model_config['pricing']:4.2f} €")
-
     response = client.chat.completions.create(
         model=model_config['text_model'],
         messages=message_text,
-        temperature=0.3,
-        # max_tokens=800
+        temperature=0.4,
+        max_tokens=100
     )
 
     answer = response.choices[0].message.content
+    print_token_usage(system_prompt, user_prompt, answer, model_config)
+
     print('{}'.format(answer))
     return answer
 
-
-def test_answer(answer: str) -> bool:
-    emojis = 0
-    correct = 0
+def check_answer(answer: str) -> str:
+    correct = []
+    missing = []
     for m in re.findall(r':([a-z0-9_-]+):', answer):
-        emojis += 1
         if github_emojis.get(m):
-            correct += 1
+            correct.append(":"+m+":")
         else:
-            print(f"github is missing {m}")
-    print(f"{correct} / {emojis}")
+            missing.append(m)
+    if len(missing) > 0:
+        print(f"GitHub is missing {len(missing)}/{len(correct)} emojis: {missing}")
+
+    return ' '.join(correct)
 
 
 def emojify_str(text: str) -> str:
     for m in re.findall(r':([a-z0-9_-]+):', text):
-        if github_emojis.get(m):
+        if github_emojis.get(m) and unicode_symbols.get(github_emojis[m]):
             text = text.replace(f":{m}:", unicode_symbols[github_emojis[m]])
     return text
 
@@ -122,7 +108,8 @@ def emojify_str(text: str) -> str:
 with open(0) as stdin:
     story = '\n'.join(stdin.readlines())
 
-answer = generate_prompt(descriptions, story)
+answer = generate_prompt(create_system_prompt(), story)
 
-test_answer(answer)
+answer = check_answer(answer)
+print(answer)
 print(emojify_str(answer))
