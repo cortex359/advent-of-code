@@ -1,12 +1,13 @@
+import sys
 import re
 import numpy as np
 from collections import deque
 from collections import defaultdict
 import itertools
 
-# d = defaultdict(int)  # Default to int (0)
+file_path = sys.argv[1] if len(sys.argv) > 1 else 'input'
 
-with open("input") as file:
+with open(file_path) as file:
     data: list = [line.removesuffix("\n") for line in file]
 
 # Parsing Stuff
@@ -31,20 +32,6 @@ def get_fullstr_by_pointing_to_segment(line: str, index: int, chars: str = "0123
         end += 1
 
     return line[index + 1:end]
-
-
-# cartesian product
-# for i, j in itertools.product('ABC', 'xyz'):
-#   print('{}{}, '.format(i, j), end='')
-# Ax, Ay, Az, Bx, By, Bz, Cx, Cy, Cz
-
-# permutations
-# itertools.permutations('ABCD', 2)
-# AB AC AD BA BC BD CA CB CD DA DB DC
-
-# combinations
-# itertools.combinations('ABCD', 2)
-# AB AC AD BC BD CD
 
 
 # 2D Grid Stuff
@@ -200,3 +187,4 @@ def slice_ranges(a: set[tuple[int, int]], b: set[tuple[int, int]]) -> set[tuple[
                 sliced_boundaries.add((boundary_list[i], boundary_list[i + 1]))
 
     return sliced_boundaries
+
