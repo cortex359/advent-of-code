@@ -37,4 +37,5 @@ for start in [a for a in network.keys() if a.endswith("A")]:
 
 # Calculate the least common multiple of all steps to finde the number of steps needed
 # for all paths to reach a node that ends on Z ;-)
+print(steps)
 print(math.lcm(*steps))

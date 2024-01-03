@@ -189,13 +189,16 @@ def slice_ranges(a: set[tuple[int, int]], b: set[tuple[int, int]]) -> set[tuple[
 
 grid: list[list] = [list(line) for line in data]
 start = (0, [n for n in range(len(grid[0])) if grid[0][n] == '.'][0])
-print(start)
 
-visited, queue = set(), deque((start, [start])
+
+
+# ((0, 1), [(0, 1)])
+visited, queue = set(), deque([(start, [start])])
 while queue:
     vertex, path = queue.popleft()
     if vertex not in visited:
         visited.add(vertex)
+        print(f"vertex: {vertex}")
         for n in get_neighbor_coordinates(grid, vertex[0], vertex[1]):
             if n in visited:
                 continue
